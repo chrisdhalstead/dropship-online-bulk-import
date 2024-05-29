@@ -141,7 +141,10 @@ if ($answer -eq 0) {
     break
 }
 
+$icount = 0
+
 foreach($row in $CSV){
+ 
 
   #Assumes Column Header Name of: Serial Number
   $serialnumber = ""
@@ -178,13 +181,18 @@ $sdevice = Invoke-RestMethod -Method Post -Uri "https://$wsoserver/api/mdm/enrol
   }
   
   catch {
-    Write-Log "An error occurred when adding Device: $($serialnumber):  $_" -Level "Warning"
+  
+    Write-Log "An error occurred when adding Device: $($serialnumber):  $_.ErrorDetails.Message" -Level "Warning"
+   
     continue
   }
 
- Write-Log "Added Device: $($sdevice.device_friendly_name)" Information
+ Write-Log "Added Device: $($serialnumber) - $($sdevice.device_friendly_name)" Information
+ $icount++
 
 }
+
+Write-Log "Added $icount Devices"
 
 #Sync Devices
 Write-Log "Syncing with OPS..." Information
