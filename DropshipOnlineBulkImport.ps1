@@ -122,6 +122,29 @@ Function ImportDevices() {
 
   $CSV = Import-Csv -Path "$PSScriptRoot\Devices.csv"
 
+  Write-Log "Devices to be added:" Information
+
+  $CSV | Format-List
+
+  $squestion = "Are you sure you want to add these devices to the $ogfn OG on $wsoserver ?"
+
+ # Clear-Host
+$answer = $Host.UI.PromptForChoice('Add Devices?', $squestion, @('&Yes', '&No'), 1)
+
+if ($answer -eq 0) {
+    #yes
+    Write-Host 'Adding Devices'
+}else{
+    
+  Write-Log "Script Execution Complete - No Devices added" Information
+    
+    break
+}
+
+
+
+
+
 foreach($row in $CSV){
 
   #Assumes Column Header Name of: Serial Number
@@ -159,7 +182,7 @@ $sdevice = Invoke-RestMethod -Method Post -Uri "https://$wsoserver/api/mdm/enrol
   }
   
   catch {
-    Write-Log "An error occurred when searching OGs:  $_" -Level "Warning"
+    Write-Log "An error occurred when adding Devices:  $_" -Level "Warning"
     exit
   
   }
