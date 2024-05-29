@@ -164,12 +164,12 @@ $sdevice = Invoke-RestMethod -Method Post -Uri "https://$wsoserver/api/mdm/enrol
   
   }
 
- Write-Log "Added Device: $sdevice.device_friendly_name" Information
+ Write-Log "Added Device: $($sdevice.device_friendly_name)" Information
 
 }
 
 #Sync Devices
-Write-Log "Syncing with OPS" Information
+Write-Log "Syncing with OPS..." Information
 
 try {
    
@@ -178,19 +178,35 @@ try {
     }
     
     catch {
-      Write-Log "An error occurred when searching OGs:  $_" -Level "Warning"
+      Write-Log "An error occurred when syncing devices to OPS:  $_" -Level "Warning"
       exit
     
     }
-  
-Write-Log "Sync Completed at: " Information
+   
+    #Sleep 5 Seconds
+    Start-Sleep(5)
  
+    try {
+   
+     $stime = Invoke-RestMethod -Method Get -Uri "https://$wsoserver/API/mdm/groups/$oguuid/last-sync" -ContentType "application/json" -Header $header
+        
+        }
+        
+        catch {
+          Write-Log "An error occurred when getting last sync time:  $_" -Level "Warning"
+          exit
+        
+        }
+
+
+
+$synctime = $stime.last_sync
+
+$humantime = [DateTime]$synctime
+
+Write-Log "Sync Completed at: $($humantime)" Information
  
-
-
-
-
-
+Write-Log "Script Execution Complete" Information
 
 
 
