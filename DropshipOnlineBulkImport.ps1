@@ -88,10 +88,24 @@ Function ImportDevices() {
     foreach ($property in $_.PSObject.Properties)
    
     {
-        write-host $property.Name, $property.Value
+        #write-host $property.Name, $property.Value
     } 
 
 } 
+
+$CSV = Import-Csv -Path "$PSScriptRoot\Devices.csv"
+
+foreach($row in $CSV){
+
+$serialnumber = ""
+
+$serialnumber = $row."Serial Number"
+
+write-host $serialnumber
+
+}
+
+
 
   break
 
