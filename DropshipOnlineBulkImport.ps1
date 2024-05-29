@@ -77,37 +77,6 @@ Function Write-Log {
 
 
 Function ImportDevices() {
-    
-  $P = Import-Csv -Path "$PSScriptRoot\Devices.csv"
-  $P | Format-List 
-
- #write-host $P
-
-  Import-Csv -Path "$PSScriptRoot\Devices.csv" | Foreach-Object { 
-
-    foreach ($property in $_.PSObject.Properties)
-   
-    {
-        #write-host $property.Name, $property.Value
-    } 
-
-} 
-
-$CSV = Import-Csv -Path "$PSScriptRoot\Devices.csv"
-
-foreach($row in $CSV){
-
-$serialnumber = ""
-
-$serialnumber = $row."Serial Number"
-
-write-host $serialnumber
-
-}
-
-
-
-  break
 
   #Bind to the UEM API Server
   $WSOServer = Read-Host -Prompt 'Enter the Workspace ONE UEM API Server Name'
@@ -151,7 +120,78 @@ write-host $serialnumber
 
   Write-Log "Selected Organization Group: $ogfn" Information
 
+  $CSV = Import-Csv -Path "$PSScriptRoot\Devices.csv"
+
+foreach($row in $CSV){
+
+  #Assumes Column Header Name of: Serial Number
+  $serialnumber = ""
+  $serialnumber = $row."Serial Number"
+
+  #Assumes Column Header Name of: Tag Name
+  $tagname = ""
+  $tagname = $row."Tag Name"
+
+  #Assumes Column Header Name of: Device Friendly Name
+  $friendlyname = ""
+  $friendlyname = $row."Device Friendly Name"
+
+  #Assumes Column Header Name of: Model Name
+  $modelname = ""
+  $modelname = $row."Model Name"
+
+
+  try {
   
+$Body = @"
+{
+  "serial_number":"$serialnumber",
+  "tags": [{"name":"$tagname"}],
+  "friendly_name":"$friendlyname",
+  "organization_group_uuid":"$oguuid",
+  "model_number":"$modelname",
+  "ownership_type":"CorporateDedicated"
+}
+"@
+
+$sdevice = Invoke-RestMethod -Method Post -Uri "https://$wsoserver/api/mdm/enrollment-tokens" -ContentType "application/json" -Header $header -Body $Body
+  
+  }
+  
+  catch {
+    Write-Log "An error occurred when searching OGs:  $_" -Level "Warning"
+    exit
+  
+  }
+
+ Write-Log "Added Device: $sdevice.device_friendly_name" Information
+
+}
+
+#Sync Devices
+Write-Log "Syncing with OPS" Information
+
+try {
+   
+  Invoke-RestMethod -Method Post -Uri "https://$wsoserver/API/mdm/dropship-action/organization-group/$oguuid/sync-devices" -ContentType "application/json" -Header $header
+    
+    }
+    
+    catch {
+      Write-Log "An error occurred when searching OGs:  $_" -Level "Warning"
+      exit
+    
+    }
+  
+Write-Log "Sync Completed at: " Information
+ 
+ 
+
+
+
+
+
+
 
 
 }
