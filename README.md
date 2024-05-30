@@ -45,7 +45,9 @@ After the script completes running, you can run the devices through the Dropship
 
 The log file will be created at `%temp%\uem-dropship-import-<date>.log`
 
-#### Video Demo:   [Demo Video](https://www.youtube.com/watch?v=sTg1PaFUPX4)
+#### Video Demo:  
+
+####  [Demo Video](https://www.youtube.com/watch?v=sTg1PaFUPX4)
 
 
 
