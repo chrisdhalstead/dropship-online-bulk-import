@@ -9,7 +9,7 @@ Script using the UEM REST API to bulk add devices to OPS from a CSV file
 
    Example:  
 
-   Serial Number,Tag Name,Device Friendly Name,Model Name`
+   `Serial Number,Tag Name,Device Friendly Name,Model Name`
 
    `DRTFC6,Dropship, Chris Laptop,Dell G16`
 
@@ -17,27 +17,27 @@ Script using the UEM REST API to bulk add devices to OPS from a CSV file
 
 2. Run the PowerShell script `DropshipOnlineBulkImport.ps1` and enter the information you are prompted for
 
-   1. UEM API Server
-   2. The UUID of the OG you want to add the Dropship Online Devices into - you can get this value when you enable Dropship Online
-   3. An Admin UEM username that has rights to interact with the UEM API 
-   4. The Corresponding PW
-   5. The UEM REST API key you want to use.  
+   - [ ] UEM API Server
+   - [ ] The UUID of the OG you want to add the Dropship Online Devices into - you can get this value when you enable Dropship Online
+   - [ ] An Admin UEM username that has rights to interact with the UEM API 
+   - [ ] The Corresponding PW
+   - [ ] The UEM REST API key you want to use.  
 
    
 
 3. Once you run the script you will be presented the list of devices to be added as read from the CSV file:
 
-   ![Screenshot 2024-05-30 151905](C:\Users\Chris\Pictures\Screenshots\Screenshot 2024-05-30 151905.png)
+   ![Screenshot 2024-05-30 151905](.\images\image1.png)
 
    
 
    You will then be prompted if you want to add all of them to the OG specified.   If you click no, nothing with happen, and the script will end.  If you click yes, each device will be added and then a sync to OPS will be initiated.  
 
-   ![Screenshot 2024-05-30 151953](C:\Users\Chris\Pictures\Screenshots\Screenshot 2024-05-30 151953.png)
+   ![Screenshot 2024-05-30 151953](.\images\image2.png)
 
    If there are any serial numbers that already exist in OPS, you will receive the following error.   Any non-duplicate devices will still be added, and the duplicate serial number will be added into the log file.  
 
-   ![Screenshot 2024-05-30 152328](C:\Users\Chris\Pictures\Screenshots\Screenshot 2024-05-30 152328.png)
+   ![Screenshot 2024-05-30 152328](.\images\image3.png)
 
    
 
